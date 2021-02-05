@@ -17,6 +17,7 @@ connection.connect(function (err) {
   console.log("connected as id " + connection.threadId);
 });
 
+//Affichage Liste
 app.get("/list", (req, res) => {
     const sqlSelect = "SELECT * FROM wishlist.list";
     connection.query(sqlSelect, (err, result) => {
@@ -27,7 +28,7 @@ app.get("/list", (req, res) => {
       }
     });
   });
-
+//Formulaire Liste
 app.post("/list", (req, res) => {
     const listName = req.body.name;
     const listPrice = req.body.price;
@@ -46,7 +47,7 @@ app.post("/list", (req, res) => {
       }
     });
   });
-
+  //Formulaire Inscription
   app.post('/register', (req, res) => {
     const regUsername = req.body.username;
     const regPassword = req.body.password;
@@ -66,3 +67,18 @@ app.post("/list", (req, res) => {
       }
     })
   });
+
+  // Supprimer un souhait via l'id
+  app.delete('/list/:idlist', (req, res) => {
+    const id = req.params.idlist;
+    const sqlDelete = 'DELETE FROM wishlist.list WHERE idlist=?';
+  connection.query(sqlDelete, [id], (err, results) => {
+      if (err) {
+        res.status(500).send("Error deleting");
+        console.log(err)
+      } else {
+        res.status(200).send("deleted!");
+      }
+    }
+  );
+});
